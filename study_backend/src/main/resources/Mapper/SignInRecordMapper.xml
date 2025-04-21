@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.finalwork02.Mapper.SignInRecordAndUserMapper">
+
+    <resultMap id="SignInRecordResultMap" type="com.example.finalwork02.pojo.SignInRecordAndUser">
+        <id property="recordId" column="record_id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="signInTime" column="sign_in_time"/>
+        <result property="status" column="status"/>
+        <association property="student" javaType="com.example.finalwork02.pojo.User">
+            <id property="userId" column="user_id"/>
+            <result property="username" column="username"/>
+        </association>
+    </resultMap>
+
+    <select id="findSignInRecordsByUserId" resultMap="SignInRecordResultMap">
+        SELECT r.record_id, r.task_id, r.student_id, r.sign_in_time, r.status, u.user_id, u.username
+        FROM sign_in_records r
+                 JOIN users u ON r.student_id = u.user_id
+        WHERE u.user_id = #{userId}
+    </select>
+
+</mapper>
